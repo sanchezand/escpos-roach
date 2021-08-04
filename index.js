@@ -334,22 +334,6 @@ Printer.prototype.beep = function (n, t) {
 };
 
 /**
-* Send data to hardware and flush buffer
-* @param  {Function} callback
-* @return {Printer} printer  [the escpos printer instance]
-*/
-Printer.prototype.flush = async function () {
-	this._cmds.push(['flush', []]);
-	var opts = [...this._cmds];
-	this._cmds = [];
-	var res = await axios.post(this._address, { opts });
-	if(res.data.error){
-		throw new Error(res.data.message || 'Unepected error with roach.')
-	}
-	return this;
-};
-
-/**
 * [function Cut paper]
 * @param  {type} part [description]
 * @return {Printer} printer  [the escpos printer instance]
@@ -366,7 +350,14 @@ Printer.prototype.cut = function (part, feed) {
 * @return {type}            [description]
 */
 Printer.prototype.close = async function () {
-	return this.flush();
+	this._cmds.push(['close']);
+	var opts = [...this._cmds];
+	this._cmds = [];
+	var res = await axios.post(this._address, { opts });
+	if(res.data.error){
+		throw new Error(res.data.message || 'Unepected error with roach.')
+	}
+	return res.data;
 };
 
 /**
