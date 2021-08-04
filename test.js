@@ -3,10 +3,8 @@ var printer = new Printer('http://localhost:3000');
 printer.font('a')
 	.align('ct')
 	.style('bu')
-	.size(1, 1)
+	.size(0,0)
 	.text('The quick brown fox jumps over the lazy dog')
-	.text('敏捷的棕色狐狸跳过懒狗')
-	.barcode('1234567', 'EAN8')
 	.table(["One", "Two", "Three"])
 	.tableCustom(
 		[
@@ -16,4 +14,4 @@ printer.font('a')
 		],
 		{ encoding: 'cp857', size: [1, 1] } // Optional
 	)
-	.qrimage('https://github.com/song940/node-escpos').flush();
+	.qrimage('https://github.com/song940/node-escpos').cut().close();
